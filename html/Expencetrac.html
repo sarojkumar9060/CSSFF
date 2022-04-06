@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+
+    <style>
+
+        #form-container{
+            display: flex;
+            
+            justify-content: center;
+            
+        }
+        #heading{
+            text-align: center;
+            color: rgb(11, 92, 150);
+            text-decoration: underline;
+            font-size: 50px;
+        }
+        #container{
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            grid-template-rows: auto;
+            gap: 50px;
+            height: auto;
+            width: 90%;
+            margin: auto;
+
+        }
+        #container>div{
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            padding: 5px;
+        }
+        #container>div>h1{
+            color: rgb(29, 115, 206);
+            
+        }
+        #inc{
+            color: rgb(55, 221, 244);
+            
+
+        }
+        #sav{
+            color: rgb(11, 92, 150);
+        }
+        #exp{
+            color: red;
+        }
+        #btn{
+            color: black;
+            background-color: rgb(110, 110, 238);
+            padding: 5px;
+            margin-top: 10px;
+           
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <h1 id="heading"> EXPENSE TRACKER </h1>
+   
+    <div id="form-container">
+
+        <form id="form">
+            <p> Select Month </p>
+            <select id="month">
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+            </select>
+            <p> Income </p>
+            <input type="number" id="income" >
+    
+            <p> Expense </p>
+            <input type="number" id="expense" >
+            <br>
+           
+          
+          <input id="btn" type="submit"  value="Submit">
+        </form>
+    </div>
+
+
+    <div id="container">
+
+
+    </div>
+        
+    
+
+   
+
+
+
+    
+<script>
+    document.querySelector('#form').addEventListener("submit",calculate);
+    let expenseData;
+    if(JSON.parse(localStorage.getItem('expenseData'))===null){
+        expenseData=[];
+       
+    }else{
+        expenseData=JSON.parse(localStorage.getItem('expenseData'));
+    }
+    
+
+    function calculate(){
+        event.preventDefault();
+
+        let expenseObj={
+         month:document.querySelector('#month').value,
+         income:document.querySelector('#income').value,
+         expense:document.querySelector('#expense').value,
+         saving:(document.querySelector('#income').value-document.querySelector('#expense').value)
+        };
+
+        expenseData.push(expenseObj);
+        localStorage.setItem('expenseData',JSON.stringify(expenseData));
+
+            displayExpense(expenseData);
+    }
+
+    function displayExpense(expenseData){
+        document.querySelector('#container').innerText="";
+
+        expenseData.forEach(function(exp){
+            let box=document.createElement('div');
+
+            let month=document.createElement('h1');
+            month.innerText="Month : " + exp.month;
+
+            let income=document.createElement('p');
+            income.setAttribute('id','inc');
+            income.innerText="Income : " +exp.income;
+
+            let expense=document.createElement('p');
+            expense.setAttribute('id','exp');
+            expense.innerText="Expense : " +exp.expense;
+
+            let saving=document.createElement('p');
+            saving.setAttribute('id','sav');
+            saving.innerText="Saving : " +exp.saving;
+            box.append(month,income,expense,saving);
+            document.querySelector('#container').append(box);
+            
+            
+        });
+    }
+   
+
+      
+   
+</script>
+</body>
+</html>
